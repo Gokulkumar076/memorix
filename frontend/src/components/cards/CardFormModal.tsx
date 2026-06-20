@@ -98,7 +98,7 @@ export function CardFormModal({ isOpen, onClose, onSubmit, initialCard, isLoadin
                 className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                   cardType === t.value
                     ? 'bg-synapse-500/20 text-synapse-300 ring-1 ring-synapse-400/40'
-                    : 'bg-ink-700/50 text-ink-300 hover:bg-ink-600/60'
+                    : 'bg-void-700/50 text-void-300 hover:bg-void-600/60'
                 }`}
               >
                 {t.label}
@@ -155,7 +155,7 @@ export function CardFormModal({ isOpen, onClose, onSubmit, initialCard, isLoadin
                     onChange={(e) => updateChoice(i, 'text', e.target.value)}
                   />
                   {choices.length > 2 && (
-                    <button type="button" onClick={() => removeChoice(i)} className="p-1.5 text-ink-500 hover:text-decay-400">
+                    <button type="button" onClick={() => removeChoice(i)} className="p-1.5 text-void-500 hover:text-decay-400">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   )}

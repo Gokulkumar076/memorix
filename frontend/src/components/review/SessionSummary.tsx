@@ -39,24 +39,24 @@ export function SessionSummary({ stats, deckId }: SessionSummaryProps) {
         </motion.div>
 
         <h1 className="text-2xl font-display font-medium mb-1.5">Session complete</h1>
-        <p className="text-sm text-ink-400 mb-8">
+        <p className="text-sm text-void-400 mb-8">
           {stats.reviewed} cards reviewed in {durationMin} minute{durationMin !== 1 ? 's' : ''}
         </p>
 
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="glass rounded-xl p-4">
-            <p className="text-2xl font-display text-ink-50">{accuracy}%</p>
-            <p className="text-xs text-ink-500 mt-1">accuracy</p>
+            <p className="text-2xl font-display text-ghost">{accuracy}%</p>
+            <p className="text-xs text-void-500 mt-1">accuracy</p>
           </div>
           <div className="glass rounded-xl p-4">
             <p className="text-2xl font-display text-synapse-300 flex items-center justify-center gap-1">
               <Sparkles className="h-4 w-4" />{stats.xpEarned}
             </p>
-            <p className="text-xs text-ink-500 mt-1">XP earned</p>
+            <p className="text-xs text-void-500 mt-1">XP earned</p>
           </div>
           <div className="glass rounded-xl p-4">
-            <p className="text-2xl font-display text-ink-50">{stats.reviewed}</p>
-            <p className="text-xs text-ink-500 mt-1">reviewed</p>
+            <p className="text-2xl font-display text-ghost">{stats.reviewed}</p>
+            <p className="text-xs text-void-500 mt-1">reviewed</p>
           </div>
         </div>
 
@@ -64,7 +64,7 @@ export function SessionSummary({ stats, deckId }: SessionSummaryProps) {
           <span className="flex items-center gap-1.5 text-decay-300"><span className="h-2 w-2 rounded-full bg-decay-400" />{stats.again} again</span>
           <span className="flex items-center gap-1.5 text-amber-300"><span className="h-2 w-2 rounded-full bg-amber-400" />{stats.hard} hard</span>
           <span className="flex items-center gap-1.5 text-synapse-300"><span className="h-2 w-2 rounded-full bg-synapse-400" />{stats.good} good</span>
-          <span className="flex items-center gap-1.5 text-ease-400"><span className="h-2 w-2 rounded-full bg-ease-400" />{stats.easy} easy</span>
+          <span className="flex items-center gap-1.5 text-mint-400"><span className="h-2 w-2 rounded-full bg-mint-400" />{stats.easy} easy</span>
         </div>
 
         <div className="flex gap-3">

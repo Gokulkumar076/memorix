@@ -73,8 +73,8 @@ export default function SettingsPage() {
         <h3 className="font-display text-base font-medium mb-5">Appearance</h3>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-ink-100">Theme</p>
-            <p className="text-xs text-ink-400">Switch between dark and light mode</p>
+            <p className="text-sm font-medium text-void-100">Theme</p>
+            <p className="text-xs text-void-400">Switch between dark and light mode</p>
           </div>
           <button
             onClick={toggleTheme}
@@ -90,8 +90,8 @@ export default function SettingsPage() {
         <h3 className="font-display text-base font-medium mb-5">Offline data</h3>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-ink-100">Clear local cache</p>
-            <p className="text-xs text-ink-400">Removes cached decks and cards stored for offline study</p>
+            <p className="text-sm font-medium text-void-100">Clear local cache</p>
+            <p className="text-xs text-void-400">Removes cached decks and cards stored for offline study</p>
           </div>
           <Button variant="secondary" onClick={handleClearCache}>
             <Trash2 className="h-4 w-4" />
@@ -104,16 +104,16 @@ export default function SettingsPage() {
         <h3 className="font-display text-base font-medium mb-2">Stats</h3>
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
-            <p className="text-2xl font-display text-ink-50">{user?.level ?? 1}</p>
-            <p className="text-xs text-ink-500">Level</p>
+            <p className="text-2xl font-display text-ghost">{user?.level ?? 1}</p>
+            <p className="text-xs text-void-500">Level</p>
           </div>
           <div>
-            <p className="text-2xl font-display text-ink-50">{user?.streak ?? 0}</p>
-            <p className="text-xs text-ink-500">Current streak</p>
+            <p className="text-2xl font-display text-ghost">{user?.streak ?? 0}</p>
+            <p className="text-xs text-void-500">Current streak</p>
           </div>
           <div>
-            <p className="text-2xl font-display text-ink-50">{user?.longest_streak ?? 0}</p>
-            <p className="text-xs text-ink-500">Longest streak</p>
+            <p className="text-2xl font-display text-ghost">{user?.longest_streak ?? 0}</p>
+            <p className="text-xs text-void-500">Longest streak</p>
           </div>
         </div>
       </Card>

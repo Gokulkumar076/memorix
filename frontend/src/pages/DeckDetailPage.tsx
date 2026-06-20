@@ -62,7 +62,7 @@ export default function DeckDetailPage() {
     <div className="space-y-7">
       <button
         onClick={() => navigate('/decks')}
-        className="flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-100 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-void-400 hover:text-void-100 transition-colors"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to decks
@@ -83,7 +83,7 @@ export default function DeckDetailPage() {
             </div>
             <div>
               <h1 className="text-2xl font-display font-medium mb-1.5">{deck.name}</h1>
-              <p className="text-sm text-ink-400 mb-3 max-w-md">{deck.description || 'No description'}</p>
+              <p className="text-sm text-void-400 mb-3 max-w-md">{deck.description || 'No description'}</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge variant="neutral">{deck.card_count} cards</Badge>
                 {deck.due_count > 0 && <Badge variant="decay">{deck.due_count} due</Badge>}
@@ -172,14 +172,14 @@ export default function DeckDetailPage() {
 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
+          <div className="absolute inset-0 bg-void-950/70 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="relative glass-bright rounded-2xl p-6 max-w-sm w-full"
           >
             <h3 className="font-display text-lg font-medium mb-2">Delete this card?</h3>
-            <p className="text-sm text-ink-400 mb-6">This action cannot be undone.</p>
+            <p className="text-sm text-void-400 mb-6">This action cannot be undone.</p>
             <div className="flex gap-3">
               <Button variant="secondary" onClick={() => setConfirmDelete(null)} className="flex-1">Cancel</Button>
               <Button

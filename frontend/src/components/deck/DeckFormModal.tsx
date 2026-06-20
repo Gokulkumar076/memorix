@@ -83,7 +83,7 @@ export function DeckFormModal({ isOpen, onClose, onSubmit, initialDeck, isLoadin
                 className={`h-9 w-9 rounded-lg flex items-center justify-center text-lg transition-all ${
                   form.cover_emoji === emoji
                     ? 'bg-synapse-500/25 ring-2 ring-synapse-400'
-                    : 'bg-ink-700/50 hover:bg-ink-600/60'
+                    : 'bg-void-700/50 hover:bg-void-600/60'
                 }`}
               >
                 {emoji}
@@ -101,7 +101,7 @@ export function DeckFormModal({ isOpen, onClose, onSubmit, initialDeck, isLoadin
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, cover_color: color }))}
                 className={`h-8 w-8 rounded-full transition-all ${
-                  form.cover_color === color ? 'ring-2 ring-offset-2 ring-offset-ink-800 ring-white' : ''
+                  form.cover_color === color ? 'ring-2 ring-offset-2 ring-offset-void-800 ring-white' : ''
                 }`}
                 style={{ backgroundColor: color }}
               />

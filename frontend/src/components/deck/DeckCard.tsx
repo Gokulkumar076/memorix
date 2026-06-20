@@ -31,7 +31,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
               e.preventDefault()
               setMenuOpen((o) => !o)
             }}
-            className="p-1.5 rounded-lg text-ink-400 hover:text-ink-50 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="p-1.5 rounded-lg text-void-400 hover:text-ghost hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             <MoreVertical className="h-4 w-4" />
           </button>
@@ -47,7 +47,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
                   setMenuOpen(false)
                   onEdit(deck)
                 }}
-                className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm text-ink-200 hover:bg-white/5"
+                className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm text-void-200 hover:bg-white/5"
               >
                 <Edit3 className="h-3.5 w-3.5" /> Edit
               </button>
@@ -67,8 +67,8 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
       </div>
 
       <Link to={`/decks/${deck.id}`}>
-        <h3 className="font-display text-base font-medium text-ink-50 mb-1.5 truncate">{deck.name}</h3>
-        <p className="text-sm text-ink-400 line-clamp-2 mb-4 min-h-[2.5rem]">
+        <h3 className="font-display text-base font-medium text-ghost mb-1.5 truncate">{deck.name}</h3>
+        <p className="text-sm text-void-400 line-clamp-2 mb-4 min-h-[2.5rem]">
           {deck.description || 'No description'}
         </p>
       </Link>

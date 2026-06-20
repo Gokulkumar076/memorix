@@ -31,7 +31,7 @@ export function Flashcard({ card, isFlipped, onFlip, selectedChoice, onSelectCho
     return (
       <div className="glass-card p-8 sm:p-10 min-h-[340px] flex flex-col">
         <p className="label-eyebrow mb-6">Choose the correct answer</p>
-        <p className="text-xl sm:text-2xl font-display text-ink-50 mb-8 text-balance">{card.front}</p>
+        <p className="text-xl sm:text-2xl font-display text-ghost mb-8 text-balance">{card.front}</p>
         <div className="space-y-2.5 flex-1">
           {card.choices?.map((choice, i) => {
             const isSelected = selectedChoice === i
@@ -45,13 +45,13 @@ export function Flashcard({ card, isFlipped, onFlip, selectedChoice, onSelectCho
                 className={`w-full text-left rounded-xl px-4 py-3.5 text-sm font-medium transition-all border ${
                   showResult
                     ? isCorrect
-                      ? 'bg-ease-500/15 border-ease-500/40 text-ease-300'
+                      ? 'bg-mint-500/15 border-mint-500/40 text-mint-400'
                       : isSelected
                         ? 'bg-decay-500/15 border-decay-500/40 text-decay-300'
-                        : 'bg-ink-700/30 border-white/[0.06] text-ink-400'
+                        : 'bg-void-700/30 border-white/[0.06] text-void-400'
                     : isSelected
                       ? 'bg-synapse-500/15 border-synapse-400/40 text-synapse-200'
-                      : 'bg-ink-700/40 border-white/[0.06] text-ink-200 hover:bg-ink-600/50'
+                      : 'bg-void-700/40 border-white/[0.06] text-void-200 hover:bg-void-600/50'
                 }`}
               >
                 {choice.text}
@@ -79,16 +79,16 @@ export function Flashcard({ card, isFlipped, onFlip, selectedChoice, onSelectCho
           {card.card_type === 'image' && card.image_url && (
             <img src={card.image_url} alt="" className="max-h-48 rounded-xl mb-6 object-contain" />
           )}
-          <p className="text-xl sm:text-2xl font-display text-ink-50 text-balance leading-relaxed">
+          <p className="text-xl sm:text-2xl font-display text-ghost text-balance leading-relaxed">
             {card.card_type === 'cloze' ? renderCloze(card.cloze_text || '', false) : card.front}
           </p>
-          <p className="text-xs text-ink-500 mt-8 font-mono">tap to reveal answer</p>
+          <p className="text-xs text-void-500 mt-8 font-mono">tap to reveal answer</p>
         </div>
 
         {/* Back */}
         <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] glass-card p-8 sm:p-10 flex flex-col items-center justify-center text-center bg-gradient-to-br from-synapse-500/[0.06] to-recall-500/[0.06]">
           <p className="label-eyebrow mb-6">Answer</p>
-          <p className="text-xl sm:text-2xl font-display text-ink-50 text-balance leading-relaxed">
+          <p className="text-xl sm:text-2xl font-display text-ghost text-balance leading-relaxed">
             {card.card_type === 'cloze' ? renderCloze(card.cloze_text || '', true) : card.back}
           </p>
         </div>

@@ -48,8 +48,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 cn(
                   'flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150',
                   isActive
-                    ? 'bg-synapse-500/15 text-synapse-300 shadow-inner-glass'
-                    : 'text-ink-300 hover:text-ink-50 hover:bg-white/5'
+                    ? 'bg-synapse-500/15 text-synapse-300 shadow-inner-edge'
+                    : 'text-void-300 hover:text-ghost hover:bg-white/5'
                 )
               }
             >
@@ -85,14 +85,14 @@ export function AppShell({ children }: { children: ReactNode }) {
               {(user?.display_name || user?.username || '?')[0]?.toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-ink-50 truncate">{user?.display_name || user?.username}</p>
-              <p className="text-xs text-ink-400 truncate">{user?.email}</p>
+              <p className="text-sm font-medium text-ghost truncate">{user?.display_name || user?.username}</p>
+              <p className="text-xs text-void-400 truncate">{user?.email}</p>
             </div>
           </button>
 
           <button
             onClick={logout}
-            className="flex items-center gap-3 w-full rounded-xl px-3.5 py-2 text-sm font-medium text-ink-400 hover:text-decay-300 hover:bg-decay-500/10 transition-colors"
+            className="flex items-center gap-3 w-full rounded-xl px-3.5 py-2 text-sm font-medium text-void-400 hover:text-decay-300 hover:bg-decay-500/10 transition-colors"
           >
             <LogOut className="h-4 w-4" />
             Sign out
@@ -108,7 +108,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
           <span className="font-display text-base font-semibold">Memorix</span>
         </div>
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-ink-200">
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-void-200">
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
@@ -127,7 +127,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium',
-                  isActive ? 'bg-synapse-500/15 text-synapse-300' : 'text-ink-300'
+                  isActive ? 'bg-synapse-500/15 text-synapse-300' : 'text-void-300'
                 )
               }
             >

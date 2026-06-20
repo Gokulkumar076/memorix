@@ -53,7 +53,7 @@ export default function OnboardingPage() {
               <div
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-                  i <= step ? 'bg-synapse-400' : 'bg-ink-700'
+                  i <= step ? 'bg-synapse-400' : 'bg-void-700'
                 }`}
               />
             ))}
@@ -73,14 +73,14 @@ export default function OnboardingPage() {
               <h1 className="text-2xl sm:text-3xl font-display font-medium mb-4 text-balance">
                 {current.title}
               </h1>
-              <p className="text-ink-300 leading-relaxed mb-10">{current.description}</p>
+              <p className="text-void-300 leading-relaxed mb-10">{current.description}</p>
             </motion.div>
           </AnimatePresence>
 
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-sm text-ink-500 hover:text-ink-300 transition-colors"
+              className="text-sm text-void-500 hover:text-void-300 transition-colors"
             >
               Skip
             </button>

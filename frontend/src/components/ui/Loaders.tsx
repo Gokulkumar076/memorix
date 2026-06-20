@@ -4,7 +4,7 @@ export function Spinner({ className }: { className?: string }) {
   return (
     <div className={cn('flex items-center justify-center', className)}>
       <div className="relative h-8 w-8">
-        <div className="absolute inset-0 rounded-full border-2 border-ink-600" />
+        <div className="absolute inset-0 rounded-full border-2 border-void-600" />
         <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-synapse-400 animate-spin" />
       </div>
     </div>
@@ -16,14 +16,14 @@ export function PageLoader() {
     <div className="flex min-h-[60vh] items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <Spinner />
-        <p className="text-sm text-ink-400 font-mono">loading…</p>
+        <p className="text-sm text-void-300 font-mono">loading…</p>
       </div>
     </div>
   )
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn('rounded-lg bg-ink-700/50 shimmer-bg', className)} />
+  return <div className={cn('rounded-lg bg-void-700/50 shimmer-bg', className)} />
 }
 
 export function DeckCardSkeleton() {

@@ -35,14 +35,16 @@ export default function AnalyticsPage() {
             />
             <StatCard
               label="Retention"
-              value={`${analytics?.average_retention ?? 0}%`}
+              value={analytics?.average_retention ?? 0}
+              suffix="%"
               icon={<TrendingUp className="h-5 w-5" />}
               accent="recall"
               subtext="30-day average"
             />
             <StatCard
               label="Study time"
-              value={`${Math.round(totalStudyMinutes)}m`}
+              value={Math.round(totalStudyMinutes)}
+              suffix="m"
               icon={<Clock className="h-5 w-5" />}
               accent="decay"
               subtext="last 30 days"
@@ -51,7 +53,7 @@ export default function AnalyticsPage() {
               label="Cards due"
               value={analytics?.cards_due_today ?? 0}
               icon={<Target className="h-5 w-5" />}
-              accent="ease"
+              accent="mint"
             />
           </>
         )}
@@ -60,13 +62,13 @@ export default function AnalyticsPage() {
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>
           <h3 className="font-display text-base font-medium mb-1">Retention over time</h3>
-          <p className="text-xs text-ink-500 mb-4">% of reviews rated Good or Easy, by day</p>
+          <p className="text-xs text-void-500 mb-4">% of reviews rated Good or Easy, by day</p>
           {isLoading ? <Skeleton className="h-64 rounded-xl" /> : <RetentionChart data={analytics?.daily_stats ?? []} />}
         </Card>
 
         <Card>
           <h3 className="font-display text-base font-medium mb-1">Review volume</h3>
-          <p className="text-xs text-ink-500 mb-4">Cards reviewed per day, last 14 days</p>
+          <p className="text-xs text-void-500 mb-4">Cards reviewed per day, last 14 days</p>
           {isLoading ? <Skeleton className="h-64 rounded-xl" /> : <ReviewVolumeChart data={analytics?.daily_stats ?? []} />}
         </Card>
       </div>
@@ -74,7 +76,7 @@ export default function AnalyticsPage() {
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>
           <h3 className="font-display text-base font-medium mb-1">Activity heatmap</h3>
-          <p className="text-xs text-ink-500 mb-4">Last 18 weeks of review activity</p>
+          <p className="text-xs text-void-500 mb-4">Last 18 weeks of review activity</p>
           {isLoading ? (
             <Skeleton className="h-32 rounded-xl" />
           ) : (
@@ -84,7 +86,7 @@ export default function AnalyticsPage() {
 
         <Card>
           <h3 className="font-display text-base font-medium mb-1">Deck performance</h3>
-          <p className="text-xs text-ink-500 mb-4">Average memory stability per deck</p>
+          <p className="text-xs text-void-500 mb-4">Average memory stability per deck</p>
           {deckPerfLoading ? (
             <Skeleton className="h-48 rounded-xl" />
           ) : (

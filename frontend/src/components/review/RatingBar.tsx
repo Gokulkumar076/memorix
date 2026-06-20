@@ -11,7 +11,7 @@ const RATING_CONFIG: { rating: ReviewRating; label: string; classes: string; key
   { rating: 'again', label: 'Again', classes: 'bg-decay-500/15 text-decay-300 hover:bg-decay-500/25 border-decay-500/30', key: '1' },
   { rating: 'hard', label: 'Hard', classes: 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border-amber-500/25', key: '2' },
   { rating: 'good', label: 'Good', classes: 'bg-synapse-500/15 text-synapse-300 hover:bg-synapse-500/25 border-synapse-500/30', key: '3' },
-  { rating: 'easy', label: 'Easy', classes: 'bg-ease-500/15 text-ease-400 hover:bg-ease-500/25 border-ease-500/30', key: '4' },
+  { rating: 'easy', label: 'Easy', classes: 'bg-mint-500/15 text-mint-400 hover:bg-mint-500/25 border-mint-500/30', key: '4' },
 ]
 
 function formatInterval(days: number): string {

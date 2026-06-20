@@ -13,9 +13,9 @@ export function DueDecksWidget({ decks }: { decks: Deck[] }) {
   if (dueDecks.length === 0) {
     return (
       <Card className="text-center py-10">
-        <Flame className="h-8 w-8 text-ease-400 mx-auto mb-3" />
-        <p className="text-sm font-medium text-ink-100">All caught up</p>
-        <p className="text-xs text-ink-400 mt-1">No reviews due right now. Nice work.</p>
+        <Flame className="h-8 w-8 text-mint-400 mx-auto mb-3" />
+        <p className="text-sm font-medium text-void-100">All caught up</p>
+        <p className="text-xs text-void-400 mt-1">No reviews due right now. Nice work.</p>
       </Card>
     )
   }
@@ -40,7 +40,7 @@ export function DueDecksWidget({ decks }: { decks: Deck[] }) {
               {deck.cover_emoji}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-ink-50 truncate">{deck.name}</p>
+              <p className="text-sm font-medium text-ghost truncate">{deck.name}</p>
               <div className="flex items-center gap-2 mt-1">
                 {deck.due_count > 0 && (
                   <Badge variant="decay">{deck.due_count} due</Badge>
@@ -50,7 +50,7 @@ export function DueDecksWidget({ decks }: { decks: Deck[] }) {
                 )}
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-ink-500 group-hover:text-synapse-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+            <ChevronRight className="h-4 w-4 text-void-500 group-hover:text-synapse-300 group-hover:translate-x-0.5 transition-all shrink-0" />
           </Link>
         </motion.div>
       ))}

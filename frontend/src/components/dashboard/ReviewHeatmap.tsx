@@ -9,7 +9,7 @@ interface HeatmapProps {
 }
 
 function getIntensityClass(count: number): string {
-  if (count === 0) return 'bg-ink-700/40'
+  if (count === 0) return 'bg-void-700/40'
   if (count < 5) return 'bg-synapse-900/80'
   if (count < 15) return 'bg-synapse-700'
   if (count < 30) return 'bg-synapse-500'
@@ -53,7 +53,7 @@ export function ReviewHeatmap({ data, weeks = 18 }: HeatmapProps) {
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-2 mt-3 text-xs text-ink-500">
+      <div className="flex items-center gap-2 mt-3 text-xs text-void-500">
         <span>Less</span>
         <div className="flex gap-1">
           {[0, 3, 10, 25, 40].map((c) => (

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, Suspense, lazy } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, Sparkles } from 'lucide-react'
@@ -12,6 +12,10 @@ import { PageLoader } from '@/components/ui/Loaders'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
 import type { ReviewRating } from '@/types'
+
+const DepthGridField = lazy(() =>
+  import('@/components/webgl/DepthGridField').then((m) => ({ default: m.DepthGridField }))
+)
 
 export default function StudyPage() {
   const { deckId } = useParams<{ deckId: string }>()
@@ -111,17 +115,25 @@ export default function StudyPage() {
   const progress = ((currentIndex) / queue.length) * 100
 
   return (
-    <div className="min-h-screen flex flex-col bg-mesh-synapse">
+    <div className="relative min-h-screen flex flex-col bg-void-950 overflow-hidden">
+      {/* Ambient depth — ultra-subtle, never competes with the card itself */}
+      <div className="absolute inset-0 -z-0 opacity-40">
+        <Suspense fallback={null}>
+          <DepthGridField className="h-full w-full" />
+        </Suspense>
+      </div>
+      <div className="absolute inset-0 -z-0 bg-void-radial" />
+
       {/* Top bar */}
-      <div className="flex items-center justify-between px-5 sm:px-8 py-5">
+      <div className="relative z-10 flex items-center justify-between px-5 sm:px-8 py-5">
         <button
           onClick={() => navigate(`/decks/${id}`)}
-          className="p-2 rounded-lg text-ink-400 hover:text-ink-50 hover:bg-white/5"
+          className="p-2 rounded-lg text-void-400 hover:text-ghost hover:bg-white/5"
         >
           <X className="h-5 w-5" />
         </button>
         <div className="flex-1 mx-6 max-w-md">
-          <div className="h-1.5 rounded-full bg-ink-700/60 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-void-700/60 overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-synapse-500 to-recall-400 rounded-full"
               animate={{ width: `${progress}%` }}
@@ -129,20 +141,20 @@ export default function StudyPage() {
             />
           </div>
         </div>
-        <span className="text-xs font-mono text-ink-400">
+        <span className="text-xs font-mono text-void-400">
           {currentIndex + 1} / {queue.length}
         </span>
       </div>
 
       {!isOnline && (
-        <div className="mx-5 sm:mx-8 mb-2 flex items-center gap-2 rounded-lg bg-decay-500/10 border border-decay-500/20 px-3 py-2 text-xs text-decay-300 w-fit">
+        <div className="relative z-10 mx-5 sm:mx-8 mb-2 flex items-center gap-2 rounded-lg bg-decay-500/10 border border-decay-500/20 px-3 py-2 text-xs text-decay-300 w-fit">
           <span className="h-1.5 w-1.5 rounded-full bg-decay-400 animate-pulse" />
           Studying offline — reviews will sync when reconnected
         </div>
       )}
 
       {/* Card area */}
-      <div className="flex-1 flex items-center justify-center px-5 sm:px-8 pb-8">
+      <div className="relative z-10 flex-1 flex items-center justify-center px-5 sm:px-8 pb-8">
         <div className="w-full max-w-xl">
           <AnimatePresence mode="wait">
             <motion.div

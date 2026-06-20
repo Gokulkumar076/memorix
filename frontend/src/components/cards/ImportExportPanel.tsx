@@ -114,8 +114,8 @@ export function ImportExportPanel({ isOpen, onClose, deckId, deckName }: ImportE
               Import from Anki (.apkg)
             </Button>
           </div>
-          <p className="text-xs text-ink-500 mt-3">
-            CSV files need <code className="text-ink-300">front</code>, <code className="text-ink-300">back</code>, and optional <code className="text-ink-300">tags</code> columns.
+          <p className="text-xs text-void-500 mt-3">
+            CSV files need <code className="text-void-300">front</code>, <code className="text-void-300">back</code>, and optional <code className="text-void-300">tags</code> columns.
           </p>
         </div>
       </div>

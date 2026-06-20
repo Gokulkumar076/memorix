@@ -62,7 +62,7 @@ export default function DecksPage() {
       </motion.div>
 
       <div className="relative max-w-sm">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-500" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-void-500" />
         <input
           className="input-field pl-10"
           placeholder="Search decks…"
@@ -145,14 +145,14 @@ function DeleteConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm" onClick={onCancel} />
+      <div className="absolute inset-0 bg-void-950/70 backdrop-blur-sm" onClick={onCancel} />
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="relative glass-bright rounded-2xl p-6 max-w-sm w-full"
       >
         <h3 className="font-display text-lg font-medium mb-2">Delete "{deckName}"?</h3>
-        <p className="text-sm text-ink-400 mb-6">
+        <p className="text-sm text-void-400 mb-6">
           This will permanently delete the deck and all its cards. This cannot be undone.
         </p>
         <div className="flex gap-3">

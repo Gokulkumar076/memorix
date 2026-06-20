@@ -30,10 +30,10 @@ export default function DashboardPage() {
   )?.reviews ?? 0
 
   return (
-    <div className="space-y-8">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-        <p className="label-eyebrow mb-1.5">{greeting}</p>
-        <h1 className="text-2xl sm:text-3xl font-display font-medium">
+    <div className="space-y-10">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+        <p className="label-eyebrow mb-2">{greeting}</p>
+        <h1 className="text-huge font-display font-medium text-balance">
           {user?.display_name || user?.username}
         </h1>
       </motion.div>
@@ -60,7 +60,8 @@ export default function DashboardPage() {
             />
             <StatCard
               label="Retention"
-              value={`${analytics?.average_retention ?? 0}%`}
+              value={analytics?.average_retention ?? 0}
+              suffix="%"
               icon={<TrendingUp className="h-5 w-5" />}
               accent="recall"
               subtext="last 30 days"
@@ -69,7 +70,7 @@ export default function DashboardPage() {
               label="Level"
               value={analytics?.level ?? 1}
               icon={<Sparkles className="h-5 w-5" />}
-              accent="ease"
+              accent="mint"
               subtext={`${analytics?.total_xp ?? 0} XP`}
             />
           </>
@@ -100,7 +101,7 @@ export default function DashboardPage() {
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display text-base font-medium">Activity</h3>
-              <p className="text-xs text-ink-500 font-mono">last 18 weeks</p>
+              <p className="text-xs text-void-500 font-mono">last 18 weeks</p>
             </div>
             {analyticsLoading ? (
               <Skeleton className="h-32 rounded-xl" />
@@ -119,8 +120,8 @@ export default function DashboardPage() {
               max={dailyGoal}
               colorClass="bg-gradient-to-r from-synapse-500 to-recall-400"
             />
-            <p className="text-sm text-ink-300 mt-3">
-              <span className="font-display text-lg text-ink-50">{todayReviews}</span>
+            <p className="text-sm text-void-300 mt-3">
+              <span className="font-display text-lg text-ghost">{todayReviews}</span>
               {' '}/ {dailyGoal} reviews completed
             </p>
           </Card>
@@ -148,7 +149,7 @@ export default function DashboardPage() {
               <Sparkles className="h-4 w-4 text-synapse-300" />
               <h3 className="font-display text-sm font-medium">AI Card Generator</h3>
             </div>
-            <p className="text-xs text-ink-400 mb-4">
+            <p className="text-xs text-void-400 mb-4">
               Describe any topic and generate a full deck of flashcards instantly.
             </p>
             <Link to="/decks">
