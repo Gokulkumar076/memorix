@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Suspense, lazy, useRef } from 'react'
+import { Suspense, lazy, useRef, useState, useEffect } from 'react'
 import { Sparkles, Brain, Zap, BarChart3, Globe2, Layers, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Magnetic } from '@/components/ui/Magnetic'
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { KineticNumber } from '@/components/ui/KineticNumber'
+import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { isWebGLAvailable } from '@/lib/webgl-check'
 
 const MemoryTraceField = lazy(() =>
   import('@/components/webgl/MemoryTraceField').then((m) => ({ default: m.MemoryTraceField }))
@@ -57,6 +59,11 @@ export default function LandingPage() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.92])
+  const [webglOk, setWebglOk] = useState(true)
+
+  useEffect(() => {
+    setWebglOk(isWebGLAvailable())
+  }, [])
 
   return (
     <div className="min-h-screen overflow-x-clip bg-void-950">
@@ -79,9 +86,15 @@ export default function LandingPage() {
       {/* HERO — oversized type over the WebGL memory trace field */}
       <section ref={heroRef} className="relative min-h-[92vh] flex items-center px-6 lg:px-12">
         <div className="absolute inset-0 -z-0">
-          <Suspense fallback={<div className="h-full w-full bg-void-radial" />}>
-            <MemoryTraceField className="h-full w-full opacity-90" density={1.1} />
-          </Suspense>
+          {webglOk ? (
+            <WebGLBoundary fallback={<div className="h-full w-full bg-void-radial" />}>
+              <Suspense fallback={<div className="h-full w-full bg-void-radial" />}>
+                <MemoryTraceField className="h-full w-full opacity-90" density={1.1} />
+              </Suspense>
+            </WebGLBoundary>
+          ) : (
+            <div className="h-full w-full bg-void-radial" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-void-950/20 to-void-950" />
         </div>
 

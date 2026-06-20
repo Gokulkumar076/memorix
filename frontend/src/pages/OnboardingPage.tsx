@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Brain, Zap, Trophy } from 'lucide-react'
 import { ForgettingCurveViz } from '@/components/onboarding/ForgettingCurveViz'
 import { Button } from '@/components/ui/Button'
+import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { isWebGLAvailable } from '@/lib/webgl-check'
 
 const steps = [
   {
@@ -28,9 +30,14 @@ const steps = [
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(0)
+  const [webglOk, setWebglOk] = useState(true)
   const navigate = useNavigate()
   const isLast = step === steps.length - 1
   const current = steps[step]
+
+  useEffect(() => {
+    setWebglOk(isWebGLAvailable())
+  }, [])
 
   const next = () => {
     if (isLast) {
@@ -43,7 +50,15 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       <div className="relative h-64 lg:h-auto lg:w-1/2 glass !rounded-none border-r border-white/[0.06]">
-        <ForgettingCurveViz className="h-full w-full" />
+        {webglOk ? (
+          <WebGLBoundary fallback={<div className="h-full w-full bg-void-radial" />}>
+            <ForgettingCurveViz className="h-full w-full" />
+          </WebGLBoundary>
+        ) : (
+          <div className="h-full w-full bg-void-radial flex items-center justify-center">
+            <Brain className="h-16 w-16 text-synapse-400/40" />
+          </div>
+        )}
       </div>
 
       <div className="flex-1 flex items-center justify-center px-6 py-12">

@@ -11,6 +11,8 @@ import { SessionSummary } from '@/components/review/SessionSummary'
 import { PageLoader } from '@/components/ui/Loaders'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
+import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { isWebGLAvailable } from '@/lib/webgl-check'
 import type { ReviewRating } from '@/types'
 
 const DepthGridField = lazy(() =>
@@ -26,6 +28,11 @@ export default function StudyPage() {
   const { submitOfflineAware, isOnline } = useSubmitReview()
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [webglOk, setWebglOk] = useState(true)
+
+  useEffect(() => {
+    setWebglOk(isWebGLAvailable())
+  }, [])
 
   const {
     queue, currentIndex, isFlipped, stats, isComplete, cardStartTime,
@@ -118,9 +125,13 @@ export default function StudyPage() {
     <div className="relative min-h-screen flex flex-col bg-void-950 overflow-hidden">
       {/* Ambient depth — ultra-subtle, never competes with the card itself */}
       <div className="absolute inset-0 -z-0 opacity-40">
-        <Suspense fallback={null}>
-          <DepthGridField className="h-full w-full" />
-        </Suspense>
+        {webglOk && (
+          <WebGLBoundary fallback={null}>
+            <Suspense fallback={null}>
+              <DepthGridField className="h-full w-full" />
+            </Suspense>
+          </WebGLBoundary>
+        )}
       </div>
       <div className="absolute inset-0 -z-0 bg-void-radial" />
 
