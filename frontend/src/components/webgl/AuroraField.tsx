@@ -75,7 +75,15 @@ export function AuroraField({ className }: { className?: string }) {
     let t = 0
     const draw = () => {
       t += 0.0035
+
+      // Solid dark base every frame — this was missing, which let the
+      // translucent blob gradients accumulate toward white/gray instead
+      // of sitting on the intended near-black void background.
       ctx.clearRect(0, 0, width, height)
+      ctx.fillStyle = '#050309'
+      ctx.fillRect(0, 0, width, height)
+
+      ctx.globalCompositeOperation = 'lighter'
 
       for (const blob of blobsRef.current) {
         // gentle drift + mouse-reactive pull
@@ -91,13 +99,17 @@ export function AuroraField({ className }: { className?: string }) {
         const radius = blob.r * Math.max(width, height) * pulse
 
         const gradient = ctx.createRadialGradient(px, py, 0, px, py, radius)
-        gradient.addColorStop(0, `${COLORS[blob.hue]} 0.22)`)
-        gradient.addColorStop(0.5, `${COLORS[blob.hue]} 0.08)`)
+        gradient.addColorStop(0, `${COLORS[blob.hue]} 0.35)`)
+        gradient.addColorStop(0.5, `${COLORS[blob.hue]} 0.12)`)
         gradient.addColorStop(1, `${COLORS[blob.hue]} 0)`)
 
+        // Fill only this blob's own bounding box, not the whole canvas —
+        // painting the full canvas per-blob is what caused the wash-out.
         ctx.fillStyle = gradient
-        ctx.fillRect(0, 0, width, height)
+        ctx.fillRect(px - radius, py - radius, radius * 2, radius * 2)
       }
+
+      ctx.globalCompositeOperation = 'source-over'
 
       rafRef.current = requestAnimationFrame(draw)
     }
