@@ -66,15 +66,13 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    // Defer the WebGL check + check off the critical render path so the
-    // hero paints immediately with AuroraField; the particle layer fades
-    // in afterward as a pure enhancement, never blocking first paint.
-    const idle = ('requestIdleCallback' in window ? window.requestIdleCallback : setTimeout) as typeof setTimeout
-    const handle = idle(() => setWebglOk(isWebGLAvailable()), 1)
-    return () => {
-      if ('cancelIdleCallback' in window) window.cancelIdleCallback(handle as unknown as number)
-      else clearTimeout(handle)
-    }
+    // Defer the WebGL check off the critical render path so the hero paints
+    // immediately with AuroraField; the particle layer fades in afterward
+    // as a pure enhancement, never blocking first paint. Plain setTimeout
+    // is used deliberately — requestIdleCallback has an inconsistent
+    // signature across browsers and isn't worth the complexity here.
+    const timer = setTimeout(() => setWebglOk(isWebGLAvailable()), 50)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
