@@ -1,20 +1,14 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Suspense, lazy, useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Sparkles, Brain, Zap, BarChart3, Globe2, Layers, ArrowRight, ArrowUpRight, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Magnetic } from '@/components/ui/Magnetic'
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { KineticNumber } from '@/components/ui/KineticNumber'
-import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
 import { AuroraField } from '@/components/webgl/AuroraField'
-import { isWebGLAvailable } from '@/lib/webgl-check'
 import { cn } from '@/lib/utils'
-
-const MemoryTraceField = lazy(() =>
-  import('@/components/webgl/MemoryTraceField').then((m) => ({ default: m.MemoryTraceField }))
-)
 
 const features = [
   {
@@ -62,18 +56,7 @@ export default function LandingPage() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.92])
-  const [webglOk, setWebglOk] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    // Defer the WebGL check off the critical render path so the hero paints
-    // immediately with AuroraField; the particle layer fades in afterward
-    // as a pure enhancement, never blocking first paint. Plain setTimeout
-    // is used deliberately — requestIdleCallback has an inconsistent
-    // signature across browsers and isn't worth the complexity here.
-    const timer = setTimeout(() => setWebglOk(isWebGLAvailable()), 50)
-    return () => clearTimeout(timer)
-  }, [])
 
   useEffect(() => {
     return scrollY.on('change', (y) => setScrolled(y > 40))
@@ -123,26 +106,14 @@ export default function LandingPage() {
         </motion.div>
       </motion.nav>
 
-      {/* HERO — AuroraField (CSS/Canvas2D, instant, zero dependency) is the base
-          layer for every visitor. MemoryTraceField (WebGL) cross-fades on top
-          only once confirmed available — pure enhancement, never a blocker. */}
+      {/* HERO — single, robust CSS background. No canvas, no WebGL, no
+          layering, no timing-dependent fade-ins. This is deliberate after
+          repeated WebGL failure modes (disabled GPU, broken canvas paint
+          math, mid-session context loss) — removing the entire class of
+          risk is more valuable here than one more targeted patch. */}
       <section ref={heroRef} className="relative min-h-[92vh] flex items-center px-6 lg:px-12 pt-20">
         <div className="absolute inset-0 -z-0">
           <AuroraField className="h-full w-full" />
-          {webglOk && (
-            <WebGLBoundary fallback={null}>
-              <Suspense fallback={null}>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1.2 }}
-                  className="absolute inset-0"
-                >
-                  <MemoryTraceField className="h-full w-full" density={1.1} />
-                </motion.div>
-              </Suspense>
-            </WebGLBoundary>
-          )}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-void-950/20 to-void-950" />
         </div>
 
