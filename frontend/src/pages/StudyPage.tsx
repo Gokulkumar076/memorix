@@ -12,6 +12,7 @@ import { PageLoader } from '@/components/ui/Loaders'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
 import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { AuroraField } from '@/components/webgl/AuroraField'
 import { isWebGLAvailable } from '@/lib/webgl-check'
 import type { ReviewRating } from '@/types'
 
@@ -123,8 +124,12 @@ export default function StudyPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-void-950 overflow-hidden">
-      {/* Ambient depth — ultra-subtle, never competes with the card itself */}
-      <div className="absolute inset-0 -z-0 opacity-40">
+      {/* AuroraField is the baseline ambient background for every visitor.
+          DepthGridField (WebGL) layers on top only when available. */}
+      <div className="absolute inset-0 -z-0 opacity-30">
+        <AuroraField className="h-full w-full" />
+      </div>
+      <div className="absolute inset-0 -z-0 opacity-30">
         {webglOk && (
           <WebGLBoundary fallback={null}>
             <Suspense fallback={null}>

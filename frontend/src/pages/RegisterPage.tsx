@@ -5,6 +5,7 @@ import { Sparkles, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useRegister } from '@/hooks/useAuth'
+import { AuroraField } from '@/components/webgl/AuroraField'
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ email: '', username: '', password: '', displayName: '' })
@@ -24,8 +25,8 @@ export default function RegisterPage() {
     setForm((f) => ({ ...f, [field]: e.target.value }))
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
-      <div className="absolute inset-0 bg-void-radial opacity-50 pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden bg-void-950">
+      <AuroraField className="absolute inset-0 h-full w-full opacity-50 pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}

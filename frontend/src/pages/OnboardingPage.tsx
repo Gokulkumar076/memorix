@@ -5,6 +5,7 @@ import { ArrowRight, Brain, Zap, Trophy } from 'lucide-react'
 import { ForgettingCurveViz } from '@/components/onboarding/ForgettingCurveViz'
 import { Button } from '@/components/ui/Button'
 import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { AuroraField } from '@/components/webgl/AuroraField'
 import { isWebGLAvailable } from '@/lib/webgl-check'
 
 const steps = [
@@ -49,15 +50,14 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      <div className="relative h-64 lg:h-auto lg:w-1/2 glass !rounded-none border-r border-white/[0.06]">
-        {webglOk ? (
-          <WebGLBoundary fallback={<div className="h-full w-full bg-void-radial" />}>
-            <ForgettingCurveViz className="h-full w-full" />
+      <div className="relative h-64 lg:h-auto lg:w-1/2 glass !rounded-none border-r border-white/[0.06] overflow-hidden">
+        <AuroraField className="absolute inset-0 h-full w-full" />
+        {webglOk && (
+          <WebGLBoundary fallback={null}>
+            <div className="absolute inset-0">
+              <ForgettingCurveViz className="h-full w-full" />
+            </div>
           </WebGLBoundary>
-        ) : (
-          <div className="h-full w-full bg-void-radial flex items-center justify-center">
-            <Brain className="h-16 w-16 text-synapse-400/40" />
-          </div>
         )}
       </div>
 

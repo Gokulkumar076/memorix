@@ -5,6 +5,7 @@ import { Sparkles, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useLogin } from '@/hooks/useAuth'
+import { AuroraField } from '@/components/webgl/AuroraField'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -17,8 +18,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-void-radial opacity-50 pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-void-950">
+      <AuroraField className="absolute inset-0 h-full w-full opacity-50 pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}

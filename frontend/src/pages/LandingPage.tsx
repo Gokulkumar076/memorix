@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Suspense, lazy, useRef, useState, useEffect } from 'react'
-import { Sparkles, Brain, Zap, BarChart3, Globe2, Layers, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { Sparkles, Brain, Zap, BarChart3, Globe2, Layers, ArrowRight, ArrowUpRight, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Magnetic } from '@/components/ui/Magnetic'
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { KineticNumber } from '@/components/ui/KineticNumber'
 import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
+import { AuroraField } from '@/components/webgl/AuroraField'
 import { isWebGLAvailable } from '@/lib/webgl-check'
+import { cn } from '@/lib/utils'
 
 const MemoryTraceField = lazy(() =>
   import('@/components/webgl/MemoryTraceField').then((m) => ({ default: m.MemoryTraceField }))
@@ -56,44 +58,92 @@ const features = [
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const { scrollY } = useScroll()
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.92])
-  const [webglOk, setWebglOk] = useState(true)
+  const [webglOk, setWebglOk] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    setWebglOk(isWebGLAvailable())
+    // Defer the WebGL check + check off the critical render path so the
+    // hero paints immediately with AuroraField; the particle layer fades
+    // in afterward as a pure enhancement, never blocking first paint.
+    const idle = ('requestIdleCallback' in window ? window.requestIdleCallback : setTimeout) as typeof setTimeout
+    const handle = idle(() => setWebglOk(isWebGLAvailable()), 1)
+    return () => {
+      if ('cancelIdleCallback' in window) window.cancelIdleCallback(handle as unknown as number)
+      else clearTimeout(handle)
+    }
   }, [])
+
+  useEffect(() => {
+    return scrollY.on('change', (y) => setScrolled(y > 40))
+  }, [scrollY])
 
   return (
     <div className="min-h-screen overflow-x-clip bg-void-950">
-      {/* Nav */}
-      <nav className="relative z-20 flex items-center justify-between px-6 lg:px-12 py-6 max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-synapse-500 flex items-center justify-center shadow-glow-synapse">
-            <Sparkles className="h-4 w-4 text-white" />
-          </div>
-          <span className="font-display text-lg font-semibold tracking-tight">Memorix</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="btn-ghost">Sign in</Link>
-          <Link to="/register">
-            <Button size="sm">Get started</Button>
+      {/* NAV — a floating capsule that contracts and gains a glass edge on scroll,
+          with a live "engine status" pulse instead of a generic logo lockup */}
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-4 inset-x-0 z-30 flex justify-center px-4"
+      >
+        <motion.div
+          animate={{
+            paddingLeft: scrolled ? 14 : 20,
+            paddingRight: scrolled ? 10 : 16,
+          }}
+          className={cn(
+            'flex items-center gap-6 rounded-full py-2 transition-colors duration-500',
+            scrolled ? 'glass-bright shadow-glow-synapse/20' : 'bg-transparent'
+          )}
+        >
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="relative h-7 w-7 rounded-lg bg-synapse-500 flex items-center justify-center shadow-glow-synapse">
+              <Sparkles className="h-3.5 w-3.5 text-white" />
+              <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-mint-500 animate-pulse-glow" />
+            </div>
+            <span className="font-display text-base font-semibold tracking-tight hidden sm:inline">Memorix</span>
           </Link>
-        </div>
-      </nav>
 
-      {/* HERO — oversized type over the WebGL memory trace field */}
-      <section ref={heroRef} className="relative min-h-[92vh] flex items-center px-6 lg:px-12">
+          <div className="hidden md:flex items-center gap-1.5 pl-2 pr-1 text-[11px] font-mono text-void-300 border-l border-white/10">
+            <Activity className="h-3 w-3 text-mint-500" />
+            <span>engine live</span>
+          </div>
+
+          <div className="flex items-center gap-2 pl-2">
+            <Link to="/login" className="btn-ghost !px-3.5 !py-1.5 text-sm">Sign in</Link>
+            <Magnetic strength={0.25}>
+              <Link to="/register">
+                <Button size="sm">Get started</Button>
+              </Link>
+            </Magnetic>
+          </div>
+        </motion.div>
+      </motion.nav>
+
+      {/* HERO — AuroraField (CSS/Canvas2D, instant, zero dependency) is the base
+          layer for every visitor. MemoryTraceField (WebGL) cross-fades on top
+          only once confirmed available — pure enhancement, never a blocker. */}
+      <section ref={heroRef} className="relative min-h-[92vh] flex items-center px-6 lg:px-12 pt-20">
         <div className="absolute inset-0 -z-0">
-          {webglOk ? (
-            <WebGLBoundary fallback={<div className="h-full w-full bg-void-radial" />}>
-              <Suspense fallback={<div className="h-full w-full bg-void-radial" />}>
-                <MemoryTraceField className="h-full w-full opacity-90" density={1.1} />
+          <AuroraField className="h-full w-full" />
+          {webglOk && (
+            <WebGLBoundary fallback={null}>
+              <Suspense fallback={null}>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1.2 }}
+                  className="absolute inset-0"
+                >
+                  <MemoryTraceField className="h-full w-full" density={1.1} />
+                </motion.div>
               </Suspense>
             </WebGLBoundary>
-          ) : (
-            <div className="h-full w-full bg-void-radial" />
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-void-950/20 to-void-950" />
         </div>
@@ -119,7 +169,7 @@ export default function LandingPage() {
             className="text-mega font-display font-medium text-balance"
           >
             Forget the<br />
-            <span className="text-gradient-synapse italic">forgetting</span><br />
+            <span className="text-gradient-synapse italic pb-2 inline-block">forgetting</span><br />
             curve.
           </motion.h1>
 

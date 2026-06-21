@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { AuroraField } from '@/components/webgl/AuroraField'
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-void-radial opacity-50 pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-void-950">
+      <AuroraField className="absolute inset-0 h-full w-full opacity-50 pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
