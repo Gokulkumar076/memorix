@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Brain, Zap, Trophy } from 'lucide-react'
-import { ForgettingCurveViz } from '@/components/onboarding/ForgettingCurveViz'
 import { Button } from '@/components/ui/Button'
-import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
 import { AuroraField } from '@/components/webgl/AuroraField'
-import { isWebGLAvailable } from '@/lib/webgl-check'
 
 const steps = [
   {
@@ -31,14 +28,9 @@ const steps = [
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(0)
-  const [webglOk, setWebglOk] = useState(true)
   const navigate = useNavigate()
   const isLast = step === steps.length - 1
   const current = steps[step]
-
-  useEffect(() => {
-    setWebglOk(isWebGLAvailable())
-  }, [])
 
   const next = () => {
     if (isLast) {
@@ -52,13 +44,9 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex flex-col lg:flex-row">
       <div className="relative h-64 lg:h-auto lg:w-1/2 glass !rounded-none border-r border-white/[0.06] overflow-hidden">
         <AuroraField className="absolute inset-0 h-full w-full" />
-        {webglOk && (
-          <WebGLBoundary fallback={null}>
-            <div className="absolute inset-0">
-              <ForgettingCurveViz className="h-full w-full" />
-            </div>
-          </WebGLBoundary>
-        )}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <current.icon className="h-20 w-20 text-synapse-400/30" strokeWidth={1} />
+        </div>
       </div>
 
       <div className="flex-1 flex items-center justify-center px-6 py-12">

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, Suspense, lazy } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, Sparkles } from 'lucide-react'
@@ -11,14 +11,8 @@ import { SessionSummary } from '@/components/review/SessionSummary'
 import { PageLoader } from '@/components/ui/Loaders'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
-import { WebGLBoundary } from '@/components/webgl/WebGLBoundary'
 import { AuroraField } from '@/components/webgl/AuroraField'
-import { isWebGLAvailable } from '@/lib/webgl-check'
 import type { ReviewRating } from '@/types'
-
-const DepthGridField = lazy(() =>
-  import('@/components/webgl/DepthGridField').then((m) => ({ default: m.DepthGridField }))
-)
 
 export default function StudyPage() {
   const { deckId } = useParams<{ deckId: string }>()
@@ -29,11 +23,6 @@ export default function StudyPage() {
   const { submitOfflineAware, isOnline } = useSubmitReview()
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [webglOk, setWebglOk] = useState(true)
-
-  useEffect(() => {
-    setWebglOk(isWebGLAvailable())
-  }, [])
 
   const {
     queue, currentIndex, isFlipped, stats, isComplete, cardStartTime,
@@ -124,19 +113,9 @@ export default function StudyPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-void-950 overflow-hidden">
-      {/* AuroraField is the baseline ambient background for every visitor.
-          DepthGridField (WebGL) layers on top only when available. */}
+      {/* AuroraField — pure CSS, no canvas/WebGL, the sole ambient background. */}
       <div className="absolute inset-0 -z-0 opacity-30">
         <AuroraField className="h-full w-full" />
-      </div>
-      <div className="absolute inset-0 -z-0 opacity-30">
-        {webglOk && (
-          <WebGLBoundary fallback={null}>
-            <Suspense fallback={null}>
-              <DepthGridField className="h-full w-full" />
-            </Suspense>
-          </WebGLBoundary>
-        )}
       </div>
       <div className="absolute inset-0 -z-0 bg-void-radial" />
 
