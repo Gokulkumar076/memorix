@@ -50,13 +50,13 @@ export default {
         ghost: '#f5f0ff',
       },
       fontFamily: {
-        display: ['"Fraunces"', 'serif'],
-        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       fontSize: {
-        'mega': ['clamp(3.5rem, 12vw, 11rem)', { lineHeight: '1.08', letterSpacing: '-0.04em' }],
-        'huge': ['clamp(2.5rem, 7vw, 6rem)', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        'mega': ['clamp(3.5rem, 11vw, 10rem)', { lineHeight: '1.0', letterSpacing: '-0.05em' }],
+        'huge': ['clamp(2.2rem, 6vw, 5.5rem)', { lineHeight: '1.05', letterSpacing: '-0.04em' }],
       },
       backgroundImage: {
         'grain': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")",

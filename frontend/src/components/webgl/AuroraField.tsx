@@ -1,45 +1,90 @@
 import { cn } from '@/lib/utils'
 
 /**
- * AuroraField — pure CSS animated background. No canvas, no WebGL, no
- * requestAnimationFrame loop, no getBoundingClientRect timing dependency,
- * no JS that can silently fail. Three large radial-gradient blobs animate
- * via CSS @keyframes (defined in tailwind.config.js / index.css), composited
- * with the browser's own GPU-accelerated CSS pipeline — the same mechanism
- * that animates every transform/opacity transition elsewhere in this app
- * and has had zero reported issues.
- *
- * This intentionally replaces an earlier Canvas2D version that suffered a
- * silent failure mode: canvas dimensions read via getBoundingClientRect()
- * during the very first paint, before layout/animation had settled, could
- * come back zero-sized with no error — leaving a blank, working-as-coded
- * but visually broken canvas with nothing in the console to flag it.
- * Pure CSS has no equivalent failure surface: if the div exists, the
- * background paints, full stop.
+ * AuroraField — pure CSS animated background. No canvas, no WebGL.
+ * Larger, more vivid blobs + a subtle grid overlay for texture depth.
  */
 export function AuroraField({ className }: { className?: string }) {
   return (
     <div className={cn('relative overflow-hidden bg-void-950', className)}>
+
+      {/* Grid overlay — gives the gradient field texture and depth */}
       <div
-        className="absolute -top-1/4 -left-1/4 h-[70%] w-[70%] rounded-full opacity-40 blur-3xl animate-float-slow"
-        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%)' }}
-      />
-      <div
-        className="absolute -bottom-1/4 -right-1/4 h-[70%] w-[70%] rounded-full opacity-35 blur-3xl animate-float-slow"
+        className="absolute inset-0"
         style={{
-          background: 'radial-gradient(circle, rgba(34,211,238,0.45) 0%, transparent 70%)',
-          animationDelay: '-4s',
+          backgroundImage: `
+            linear-gradient(rgba(139,92,246,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(139,92,246,0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
         }}
       />
+
+      {/* Blob 1 — large violet, top-left, slow drift */}
       <div
-        className="absolute top-1/3 left-1/2 h-[50%] w-[50%] -translate-x-1/2 rounded-full opacity-25 blur-3xl animate-float"
+        className="absolute rounded-full blur-[120px] animate-float-slow"
         style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)',
-          animationDelay: '-2s',
+          background: 'radial-gradient(circle, rgba(124,58,237,0.7) 0%, transparent 70%)',
+          width: '80%',
+          height: '80%',
+          top: '-20%',
+          left: '-20%',
+          animationDuration: '12s',
         }}
       />
-      {/* Static grain texture for depth, no animation cost */}
-      <div className="absolute inset-0 bg-grain mix-blend-overlay opacity-50" />
+
+      {/* Blob 2 — large cyan, bottom-right */}
+      <div
+        className="absolute rounded-full blur-[140px] animate-float"
+        style={{
+          background: 'radial-gradient(circle, rgba(34,211,238,0.55) 0%, transparent 70%)',
+          width: '75%',
+          height: '75%',
+          bottom: '-25%',
+          right: '-20%',
+          animationDelay: '-5s',
+          animationDuration: '10s',
+        }}
+      />
+
+      {/* Blob 3 — medium violet accent, center */}
+      <div
+        className="absolute rounded-full blur-[100px] animate-float-slow"
+        style={{
+          background: 'radial-gradient(circle, rgba(139,92,246,0.45) 0%, transparent 60%)',
+          width: '50%',
+          height: '50%',
+          top: '30%',
+          left: '35%',
+          animationDelay: '-3s',
+          animationDuration: '14s',
+        }}
+      />
+
+      {/* Blob 4 — small hot accent, top-right */}
+      <div
+        className="absolute rounded-full blur-[80px] animate-float"
+        style={{
+          background: 'radial-gradient(circle, rgba(251,112,55,0.35) 0%, transparent 70%)',
+          width: '35%',
+          height: '35%',
+          top: '-5%',
+          right: '5%',
+          animationDelay: '-7s',
+          animationDuration: '9s',
+        }}
+      />
+
+      {/* Vignette — pulls focus to center, masks harsh blob edges at frame */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, rgba(5,3,9,0.65) 100%)',
+        }}
+      />
+
+      {/* Grain — subtle film texture */}
+      <div className="absolute inset-0 bg-grain mix-blend-overlay opacity-60" />
     </div>
   )
 }
