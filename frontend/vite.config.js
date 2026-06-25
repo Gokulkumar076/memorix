@@ -49,6 +49,7 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: {
+                    'vendor-ogl': ['ogl'],
                     'vendor-charts': ['recharts'],
                     'vendor-react': ['react', 'react-dom', 'react-router-dom'],
                     'vendor-motion': ['framer-motion'],

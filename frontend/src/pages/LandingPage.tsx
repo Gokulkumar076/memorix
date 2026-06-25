@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/Card'
 import { Magnetic } from '@/components/ui/Magnetic'
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { KineticNumber } from '@/components/ui/KineticNumber'
-import { AuroraField } from '@/components/webgl/AuroraField'
+import { LightfallBackground } from '@/components/webgl/LightfallBackground'
 import { cn } from '@/lib/utils'
 
 /* ------------------------------------------------------------------ */
@@ -278,7 +278,7 @@ export default function LandingPage() {
       >
         {/* Background */}
         <div className="absolute inset-0 -z-0">
-          <AuroraField className="h-full w-full" />
+          <LightfallBackground className="h-full w-full" />
           <div className="absolute inset-0 bg-gradient-to-b from-void-950/40 via-transparent to-void-950" />
         </div>
 
@@ -420,7 +420,7 @@ export default function LandingPage() {
       {/* ── FINAL CTA ── */}
       <section className="relative py-28 px-6 lg:px-12 overflow-hidden">
         <div className="absolute inset-0">
-          <AuroraField className="h-full w-full opacity-70" />
+          <LightfallBackground className="h-full w-full opacity-70" />
           <div className="absolute inset-0 bg-void-950/55" />
         </div>
         <Reveal className="relative max-w-[1400px] mx-auto text-center">

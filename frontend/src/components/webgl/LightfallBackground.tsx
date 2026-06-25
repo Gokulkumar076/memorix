@@ -1,0 +1,101 @@
+import { Component, type ReactNode, lazy, Suspense } from 'react'
+import { AuroraField } from './AuroraField'
+
+const LightfallLazy = lazy(() => import('./Lightfall'))
+
+/**
+ * Error boundary for Lightfall — catches WebGL init failures and context
+ * loss events. AuroraField (pure CSS) is always rendered underneath as the
+ * base layer, so if Lightfall fails at any point the page still looks good.
+ */
+class LightfallBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  private containerRef: HTMLDivElement | null = null
+
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { failed: false }
+    this.handleContextLost = this.handleContextLost.bind(this)
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  componentDidMount() {
+    // Capture webglcontextlost from any canvas in this subtree
+    this.containerRef?.addEventListener('webglcontextlost', this.handleContextLost, true)
+  }
+
+  componentWillUnmount() {
+    this.containerRef?.removeEventListener('webglcontextlost', this.handleContextLost, true)
+  }
+
+  handleContextLost(e: Event) {
+    e.preventDefault()
+    this.setState({ failed: true })
+  }
+
+  render() {
+    if (this.state.failed) return null
+    return (
+      <div ref={(el) => { this.containerRef = el }} className="contents">
+        {this.props.children}
+      </div>
+    )
+  }
+}
+
+interface LightfallBackgroundProps {
+  className?: string
+  /** Memorix brand palette — synapse violet + recall cyan + void deep */
+  colors?: string[]
+  backgroundColor?: string
+}
+
+/**
+ * Full-page background using the Lightfall WebGL streak effect.
+ * AuroraField CSS gradient is always the base layer — Lightfall fades
+ * in on top. If WebGL is unavailable or context is lost at any point,
+ * AuroraField remains visible and the page looks correct.
+ */
+export function LightfallBackground({
+  className,
+  colors = ['#7c3aed', '#22d3ee', '#050309', '#4c1d95'],
+  backgroundColor = '#050309',
+}: LightfallBackgroundProps) {
+  return (
+    <div className={`relative overflow-hidden ${className ?? ''}`}>
+      {/* Always-present CSS baseline */}
+      <AuroraField className="absolute inset-0 h-full w-full" />
+
+      {/* WebGL enhancement — fades in on top when available */}
+      <div className="absolute inset-0">
+        <LightfallBoundary>
+          <Suspense fallback={null}>
+            <LightfallLazy
+              colors={colors}
+              backgroundColor={backgroundColor}
+              speed={0.6}
+              streakCount={6}
+              streakWidth={1.2}
+              streakLength={1.4}
+              glow={1.2}
+              density={0.5}
+              twinkle={0.8}
+              zoom={2.5}
+              backgroundGlow={0.3}
+              opacity={0.85}
+              mouseInteraction={true}
+              mouseStrength={0.6}
+              mouseRadius={0.8}
+              mouseDampening={0.12}
+            />
+          </Suspense>
+        </LightfallBoundary>
+      </div>
+    </div>
+  )
+}

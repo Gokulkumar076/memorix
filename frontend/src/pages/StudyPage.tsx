@@ -11,7 +11,7 @@ import { SessionSummary } from '@/components/review/SessionSummary'
 import { PageLoader } from '@/components/ui/Loaders'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
-import { AuroraField } from '@/components/webgl/AuroraField'
+import { LightfallBackground } from '@/components/webgl/LightfallBackground'
 import type { ReviewRating } from '@/types'
 
 export default function StudyPage() {
@@ -113,9 +113,9 @@ export default function StudyPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-void-950 overflow-hidden">
-      {/* AuroraField — pure CSS, no canvas/WebGL, the sole ambient background. */}
+      {/* Lightfall WebGL background — with AuroraField CSS as base fallback */}
       <div className="absolute inset-0 -z-0 opacity-30">
-        <AuroraField className="h-full w-full" />
+        <LightfallBackground className="h-full w-full" />
       </div>
       <div className="absolute inset-0 -z-0 bg-void-radial" />
 

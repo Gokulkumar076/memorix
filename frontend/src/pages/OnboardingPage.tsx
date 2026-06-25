@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Brain, Zap, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { AuroraField } from '@/components/webgl/AuroraField'
+import { LightfallBackground } from '@/components/webgl/LightfallBackground'
 
 const steps = [
   {
@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       <div className="relative h-64 lg:h-auto lg:w-1/2 glass !rounded-none border-r border-white/[0.06] overflow-hidden">
-        <AuroraField className="absolute inset-0 h-full w-full" />
+        <LightfallBackground className="absolute inset-0 h-full w-full" />
         <div className="absolute inset-0 flex items-center justify-center">
           <current.icon className="h-20 w-20 text-synapse-400/30" strokeWidth={1} />
         </div>
