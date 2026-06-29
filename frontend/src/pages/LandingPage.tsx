@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { Brain, Zap, BarChart3, Globe2, Layers, Sparkles, ArrowRight, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -10,161 +10,92 @@ import { cn } from '@/lib/utils'
 
 /* ── Features ─────────────────────────────────────────────────────── */
 const features = [
-  { icon: Brain,    glow: 'synapse' as const, title: 'FSRS scheduling',   description: 'A live model of your memory — every review recalculates exactly when you\'ll next forget.' },
-  { icon: Zap,      glow: 'recall'  as const, title: 'AI-generated decks', description: 'Name a topic. Get a full deck of structured flashcards in seconds, not hours.' },
-  { icon: BarChart3, glow: 'mint'   as const, title: 'Deep analytics',     description: 'Retention curves, heatmaps, per-deck stability — see your memory as data.' },
-  { icon: Globe2,   glow: 'decay'   as const, title: 'Offline-first',      description: 'Study with zero signal. Reviews queue locally and sync the moment you reconnect.' },
-  { icon: Layers,   glow: 'synapse' as const, title: 'Four card formats',  description: 'Basic, cloze, image, multiple choice — one scheduling engine drives all of them.' },
-  { icon: Sparkles, glow: 'recall'  as const, title: 'Built to compound',  description: 'XP, streaks, levels — engineered to reward daily consistency, not cramming.' },
+  { icon: Brain,     glow: 'synapse' as const, title: 'FSRS scheduling',    description: "A live model of your memory — every review recalculates exactly when you'll next forget." },
+  { icon: Zap,       glow: 'recall'  as const, title: 'AI-generated decks',  description: 'Name a topic. Get a full deck of structured flashcards in seconds, not hours.' },
+  { icon: BarChart3, glow: 'mint'    as const, title: 'Deep analytics',      description: 'Retention curves, heatmaps, per-deck stability — see your memory as data.' },
+  { icon: Globe2,    glow: 'decay'   as const, title: 'Offline-first',       description: 'Study with zero signal. Reviews queue locally and sync the moment you reconnect.' },
+  { icon: Layers,    glow: 'synapse' as const, title: 'Four card formats',   description: 'Basic, cloze, image, multiple choice — one scheduling engine drives all of them.' },
+  { icon: Sparkles,  glow: 'recall'  as const, title: 'Built to compound',   description: 'XP, streaks, levels — engineered to reward daily consistency, not cramming.' },
 ]
 
-/* ── Memorix wordmark SVG logo ────────────────────────────────────── */
-function MemorizLogo({ size = 32 }: { size?: number }) {
+/* ── SVG Logo ──────────────────────────────────────────────────────── */
+function MemorizLogo({ size = 28 }: { size?: number }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Memorix"
-    >
-      {/* Outer ring — represents the review cycle */}
-      <circle cx="16" cy="16" r="14" stroke="url(#ringGrad)" strokeWidth="1.5" />
-      {/* Inner neural node cluster */}
-      <circle cx="16" cy="10" r="2.5" fill="url(#topGrad)" />
-      <circle cx="22" cy="19" r="2" fill="url(#rightGrad)" />
-      <circle cx="10" cy="19" r="2" fill="url(#leftGrad)" />
-      {/* Connections */}
-      <line x1="16" y1="12.5" x2="21" y2="17.5" stroke="rgba(139,92,246,0.5)" strokeWidth="1" />
-      <line x1="16" y1="12.5" x2="11" y2="17.5" stroke="rgba(34,211,238,0.5)" strokeWidth="1" />
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Memorix">
+      <circle cx="16" cy="16" r="14" stroke="url(#rG)" strokeWidth="1.5" />
+      <circle cx="16" cy="10" r="2.5" fill="url(#tG)" />
+      <circle cx="22" cy="19" r="2"   fill="url(#rGr)" />
+      <circle cx="10" cy="19" r="2"   fill="url(#lG)" />
+      <line x1="16" y1="12.5" x2="21" y2="17.5" stroke="rgba(139,92,246,0.5)"  strokeWidth="1" />
+      <line x1="16" y1="12.5" x2="11" y2="17.5" stroke="rgba(34,211,238,0.5)"  strokeWidth="1" />
       <line x1="11.5" y1="19" x2="20.5" y2="19" stroke="rgba(139,92,246,0.35)" strokeWidth="1" />
-      {/* Centre dot */}
       <circle cx="16" cy="16" r="1.2" fill="white" opacity="0.9" />
       <defs>
-        <linearGradient id="ringGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#7c3aed" />
-          <stop offset="100%" stopColor="#22d3ee" />
-        </linearGradient>
-        <radialGradient id="topGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#a78bfa" />
-          <stop offset="100%" stopColor="#7c3aed" />
-        </radialGradient>
-        <radialGradient id="rightGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#67e8f9" />
-          <stop offset="100%" stopColor="#22d3ee" />
-        </radialGradient>
-        <radialGradient id="leftGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#a78bfa" />
-          <stop offset="100%" stopColor="#6d28d9" />
-        </radialGradient>
+        <linearGradient id="rG"  x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#7c3aed"/><stop offset="100%" stopColor="#22d3ee"/></linearGradient>
+        <radialGradient id="tG"  cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#a78bfa"/><stop offset="100%" stopColor="#7c3aed"/></radialGradient>
+        <radialGradient id="rGr" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#67e8f9"/><stop offset="100%" stopColor="#22d3ee"/></radialGradient>
+        <radialGradient id="lG"  cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#a78bfa"/><stop offset="100%" stopColor="#6d28d9"/></radialGradient>
       </defs>
     </svg>
   )
 }
 
-/* ── Animated "forgetting curve" spark line ──────────────────────── */
-function ForgettingCurveLine() {
-  const [progress, setProgress] = useState(0)
-  useEffect(() => {
-    let frame: number
-    let start: number | null = null
-    const duration = 3200
-    const animate = (ts: number) => {
-      if (!start) start = ts
-      const p = Math.min((ts - start) / duration, 1)
-      setProgress(p)
-      if (p < 1) frame = requestAnimationFrame(animate)
-      else setTimeout(() => { start = null; setProgress(0); frame = requestAnimationFrame(animate) }, 600)
-    }
-    frame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(frame)
-  }, [])
-
-  const W = 220
-  const H = 60
-  const pts = Array.from({ length: 60 }, (_, i) => {
-    const t = i / 59
-    const y = H * 0.1 + (H * 0.8) * (1 - 1 / (1 + t * 2.8))
-    return `${t * W},${y}`
-  }).join(' ')
-
-  const drawn = Math.round(progress * 60)
-  const ptArr = pts.split(' ').slice(0, Math.max(2, drawn))
-
-  return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="overflow-visible">
-      <defs>
-        <linearGradient id="curveGrad" x1="0" y1="0" x2={W} y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0aefa0" />
-          <stop offset="60%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#fb7037" />
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-          <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-      {ptArr.length >= 2 && (
-        <polyline
-          points={ptArr.join(' ')}
-          fill="none"
-          stroke="url(#curveGrad)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          filter="url(#glow)"
-        />
-      )}
-      {ptArr.length >= 2 && (() => {
-        const last = ptArr[ptArr.length - 1].split(',')
-        return <circle cx={last[0]} cy={last[1]} r="3.5" fill="#fff" filter="url(#glow)" />
-      })()}
-      <text x="2" y={H - 4} fontSize="8" fill="rgba(255,255,255,0.3)" fontFamily="monospace">0d</text>
-      <text x={W - 20} y={H - 4} fontSize="8" fill="rgba(255,255,255,0.3)" fontFamily="monospace">30d</text>
-    </svg>
-  )
-}
-
-/* ── Marquee tag strip ────────────────────────────────────────────── */
-const TAGS = ['FSRS v4.5', 'Spaced Repetition', 'AI Flashcards', 'Offline Study', 'Retention Analytics', 'Active Recall', 'Memory Science', 'Cloze Deletion']
-
-function TagStrip() {
-  return (
-    <div className="relative overflow-hidden py-3 before:absolute before:left-0 before:inset-y-0 before:w-16 before:bg-gradient-to-r before:from-void-950 before:to-transparent before:z-10 after:absolute after:right-0 after:inset-y-0 after:w-16 after:bg-gradient-to-l after:from-void-950 after:to-transparent after:z-10">
-      <motion.div
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
-        className="flex gap-3 w-max"
-      >
-        {[...TAGS, ...TAGS].map((tag, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-1.5 rounded-full glass px-3.5 py-1 text-[11px] font-mono text-void-300 border border-white/[0.06] whitespace-nowrap"
-          >
-            <span className="h-1 w-1 rounded-full bg-synapse-400" />
-            {tag}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  )
-}
-
-/* ── Main page ────────────────────────────────────────────────────── */
+/* ── Page ──────────────────────────────────────────────────────────── */
 export default function LandingPage() {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const heroRef   = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
-  const heroY       = useTransform(scrollYProgress, [0, 1], [0, 60])
-  const [scrolled, setScrolled]   = useState(false)
 
+  /*
+   * SCROLL SMOOTHNESS FIX
+   * ─────────────────────
+   * Root cause of jitter: Framer Motion's useTransform maps scroll values
+   * synchronously on every scroll event, but these values drive a motion.div
+   * that causes layout/paint on the compositor thread out-of-step with the
+   * browser's own scroll compositing. The canvas element inside also doesn't
+   * benefit from the fixed-positioning trick when it's buried inside a
+   * position:absolute container that scrolls with the page.
+   *
+   * Fix A — spring-smooth the scroll value before applying it to motion.div
+   *   useSpring with a very low stiffness / high damping acts as a low-pass
+   *   filter on the scroll position, eliminating frame-to-frame jitter from
+   *   event coalescing while staying within 1-2 frames of actual scroll.
+   *
+   * Fix B — the Lightfall canvas is placed in a fixed-position wrapper that
+   *   is unaffected by document scroll entirely. Scroll position doesn't
+   *   touch it at all — it simply stays in place and the page scrolls over it.
+   *   A gradient overlay on the hero section creates the fade-to-dark effect
+   *   without moving the canvas.
+   */
+  const rawProgress = useTransform(scrollY,
+    [0, typeof window !== 'undefined' ? window.innerHeight : 900],
+    [0, 1]
+  )
+  const smoothProgress = useSpring(rawProgress, {
+    stiffness: 60,
+    damping: 20,
+    restDelta: 0.001,
+  })
+  const heroOpacity = useTransform(smoothProgress, [0, 0.75], [1, 0])
+  const heroY       = useTransform(smoothProgress, [0, 1],    [0, 40])
+
+  const [scrolled, setScrolled] = useState(false)
   useEffect(() => scrollY.on('change', y => setScrolled(y > 40)), [scrollY])
 
   return (
     <div className="min-h-screen overflow-x-clip bg-void-950">
 
-      {/* ── NAV ────────────────────────────────────────────────────── */}
+      {/*
+       * LIGHTFALL — position:fixed, z-index below everything.
+       * Never participates in document scroll. Zero jitter by construction.
+       * Covers only the viewport; everything below the fold is just void-950.
+       */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <LightfallBackground className="h-full w-full" />
+        {/* Gradient that fades the effect out at the bottom of the hero */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void-950" />
+      </div>
+
+      {/* ── NAV ──────────────────────────────────────────────────────── */}
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -178,12 +109,8 @@ export default function LandingPage() {
             scrolled ? 'glass-bright shadow-glow-synapse/15' : 'bg-transparent'
           )}
         >
-          {/* Logo mark + wordmark */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <motion.div
-              whileHover={{ rotate: 15, scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-            >
+          <Link to="/" className="flex items-center gap-2.5">
+            <motion.div whileHover={{ rotate: 15, scale: 1.05 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }}>
               <MemorizLogo size={28} />
             </motion.div>
             <span className="font-display font-extrabold text-base tracking-tight hidden sm:inline text-ghost">
@@ -205,97 +132,65 @@ export default function LandingPage() {
         </motion.div>
       </motion.nav>
 
-      {/* ── HERO ───────────────────────────────────────────────────── */}
+      {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative h-screen min-h-[640px] max-h-[960px] overflow-hidden flex flex-col justify-center"
+        className="relative h-screen min-h-[640px] max-h-[960px] flex flex-col items-center justify-center overflow-hidden"
       >
-        {/* Background */}
-        <div className="absolute inset-0 -z-0">
-          <LightfallBackground className="h-full w-full" />
-          <div className="absolute inset-0 bg-gradient-to-b from-void-950/50 via-transparent to-void-950" />
-        </div>
-
+        {/*
+         * Content fades + rises as the user scrolls — this motion.div wraps
+         * only the TEXT, not the background canvas, so scroll-driven opacity
+         * never touches the compositor layer the canvas runs on.
+         */}
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-10 w-full max-w-[1100px] mx-auto px-6 lg:px-12 pt-20"
+          className="relative z-10 w-full max-w-[900px] mx-auto px-6 lg:px-12 pt-16 flex flex-col items-center text-center"
         >
-
-          {/* ── FSRS badge ──────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.08 }}
-            className="flex items-center gap-2 mb-10"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-mono text-recall-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-recall-400 animate-pulse-glow" />
-              Powered by FSRS v4.5
-            </span>
-          </motion.div>
-
-          {/* ── Headline — asymmetric editorial layout ───────────── */}
-          {/*
-              Design intent: not centered. Left-anchored with an intentional
-              gap on the right that's filled by the curve annotation — so the
-              headline and the visual element read as one composed unit rather
-              than two independent columns competing for attention.
-          */}
-          <div className="relative">
-            <motion.h1
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-extrabold leading-none text-mega max-w-[820px]"
-            >
-              {/* Line 1 — ghost white */}
-              <span className="block text-ghost">Forget the</span>
-
-              {/* Line 2 — gradient, italic for contrast */}
-              <span className="block text-gradient-synapse italic">forgetting</span>
-
-              {/* Line 3 — dimmed so the gradient line pops */}
-              <span className="block text-void-200">curve.</span>
-            </motion.h1>
-
-            {/* Floating curve annotation — upper right of headline */}
-            <motion.div
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="absolute top-4 right-0 hidden lg:block"
-            >
-              <div className="glass rounded-2xl px-4 py-3 border border-white/[0.08]">
-                <p className="text-[10px] font-mono text-void-400 uppercase tracking-wider mb-2">
-                  Memory decay — visualised
-                </p>
-                <ForgettingCurveLine />
-                <div className="flex justify-between mt-2 text-[9px] font-mono">
-                  <span className="text-mint-400">Strong</span>
-                  <span className="text-synapse-400">Fading</span>
-                  <span className="text-decay-400">Lost</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* ── Subtext + CTA ───────────────────────────────────── */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="text-base sm:text-lg text-void-200 max-w-lg mt-7 mb-8 leading-relaxed"
-          >
-            Memorix builds a live model of your memory and schedules every card
-            at the exact moment you're about to lose it — never a day earlier.
-          </motion.p>
-
-          {/* CTA row — no Magnetic wrapper on the primary button */}
+          {/* FSRS badge */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="flex flex-wrap items-center gap-3"
+            transition={{ duration: 0.5, delay: 0.08 }}
+            className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs font-mono text-recall-300 mb-10"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-recall-400 animate-pulse-glow" />
+            Powered by FSRS v4.5
+          </motion.div>
+
+          {/*
+           * HEADLINE — centred, reference style.
+           * Heavy weight, tight tracking, lines 1 & 3 in ghost white,
+           * line 2 in the synapse→recall gradient italic — same structural
+           * contrast as the reference screenshot's "Digitalizing Ideas into".
+           */}
+          <motion.h1
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display font-extrabold leading-[1.0] tracking-tight text-mega"
+          >
+            <span className="block text-ghost">Forget the</span>
+            <span className="block text-gradient-synapse italic">forgetting</span>
+            <span className="block text-ghost">curve.</span>
+          </motion.h1>
+
+          {/* Sub-text */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.38 }}
+            className="text-base sm:text-lg text-void-200 max-w-md mt-8 mb-9 leading-relaxed"
+          >
+            Memorix builds a live model of your memory and schedules every card
+            at the exact moment you're about to lose it.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex flex-wrap items-center justify-center gap-3 mb-12"
           >
             <Link to="/register">
               <Button size="lg">
@@ -307,26 +202,17 @@ export default function LandingPage() {
             </Link>
           </motion.div>
 
-          {/* ── Divider line ────────────────────────────────────── */}
+          {/* Proof points */}
           <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: 0 }}
-            className="glow-rule mt-12 mb-10"
-          />
-
-          {/* ── Key proof points — horizontal list, no stats numbers ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="flex flex-wrap gap-x-8 gap-y-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.75 }}
+            className="flex flex-wrap justify-center gap-x-8 gap-y-3"
           >
             {[
-              { dot: 'bg-mint-500',    text: 'Schedules every review at the optimal moment'  },
-              { dot: 'bg-synapse-400', text: 'AI generates full decks from any topic'          },
-              { dot: 'bg-recall-400',  text: 'Works completely offline, syncs automatically'   },
+              { dot: 'bg-mint-500',    text: 'Optimal review timing, always'          },
+              { dot: 'bg-synapse-400', text: 'AI decks from any topic'                },
+              { dot: 'bg-recall-400',  text: 'Fully offline, auto-syncs'              },
             ].map((p, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', p.dot)} />
@@ -347,11 +233,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── MARQUEE TAGS ───────────────────────────────────────────── */}
-      <TagStrip />
+      {/* ── Below-fold sections sit on the solid void-950 bg ─────────── */}
 
-      {/* ── FEATURES ───────────────────────────────────────────────── */}
-      <section className="max-w-[1100px] mx-auto px-6 lg:px-12 py-24">
+      {/* ── FEATURES ─────────────────────────────────────────────────── */}
+      <section className="relative bg-void-950 max-w-[1100px] mx-auto px-6 lg:px-12 py-24">
         <Reveal className="mb-16">
           <p className="label-eyebrow mb-3">How it works</p>
           <h2 className="text-huge font-display font-extrabold max-w-xl">
@@ -379,11 +264,11 @@ export default function LandingPage() {
         </RevealGroup>
       </section>
 
-      {/* ── FINAL CTA ──────────────────────────────────────────────── */}
-      <section className="relative py-32 px-6 lg:px-12 overflow-hidden">
+      {/* ── FINAL CTA ────────────────────────────────────────────────── */}
+      <section className="relative py-32 px-6 lg:px-12 overflow-hidden bg-void-950">
         <div className="absolute inset-0">
-          <LightfallBackground className="h-full w-full opacity-65" />
-          <div className="absolute inset-0 bg-void-950/60" />
+          <LightfallBackground className="h-full w-full opacity-50" />
+          <div className="absolute inset-0 bg-void-950/65" />
         </div>
         <Reveal className="relative max-w-[1100px] mx-auto text-center">
           <h2 className="text-huge font-display font-extrabold mb-4 max-w-2xl mx-auto">
@@ -402,7 +287,7 @@ export default function LandingPage() {
         </Reveal>
       </section>
 
-      <footer className="border-t border-white/[0.06] py-7 text-center text-xs text-void-600 font-mono">
+      <footer className="relative bg-void-950 border-t border-white/[0.06] py-7 text-center text-xs text-void-600 font-mono">
         © {new Date().getFullYear()} Memorix — built on the FSRS open scheduling algorithm.
       </footer>
     </div>
