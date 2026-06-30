@@ -135,7 +135,7 @@ export default function LandingPage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative h-screen min-h-[640px] max-h-[960px] flex flex-col items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex flex-col items-center justify-center py-28"
       >
         {/*
          * Content fades + rises as the user scrolls — this motion.div wraps
@@ -144,7 +144,7 @@ export default function LandingPage() {
          */}
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-10 w-full max-w-[900px] mx-auto px-6 lg:px-12 pt-16 flex flex-col items-center text-center"
+          className="relative z-10 w-full max-w-[900px] mx-auto px-6 lg:px-12 flex flex-col items-center text-center"
         >
           {/* FSRS badge */}
           <motion.div
@@ -167,7 +167,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display font-extrabold leading-[1.0] tracking-tight text-mega"
+            className="font-display font-extrabold leading-[1.15] tracking-tight text-mega pb-2"
           >
             <span className="block text-ghost">Forget the</span>
             <span className="block text-gradient-synapse italic">forgetting</span>

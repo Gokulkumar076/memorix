@@ -63,8 +63,8 @@ interface LightfallBackgroundProps {
  */
 export function LightfallBackground({
   className,
-  colors = ['#7c3aed', '#22d3ee', '#050309', '#4c1d95'],
-  backgroundColor = '#050309',
+  colors = ['#a78bfa', '#7c3aed', '#67e8f9', '#22d3ee'],
+  backgroundColor = '#1e1b4b',
 }: LightfallBackgroundProps) {
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`}>
@@ -78,19 +78,19 @@ export function LightfallBackground({
             <LightfallLazy
               colors={colors}
               backgroundColor={backgroundColor}
-              speed={0.6}
-              streakCount={6}
-              streakWidth={1.2}
-              streakLength={1.4}
-              glow={1.2}
-              density={0.5}
-              twinkle={0.8}
-              zoom={2.5}
-              backgroundGlow={0.3}
-              opacity={0.85}
+              speed={0.55}
+              streakCount={9}
+              streakWidth={1.5}
+              streakLength={1.6}
+              glow={1.8}
+              density={0.85}
+              twinkle={0.9}
+              zoom={2.2}
+              backgroundGlow={0.55}
+              opacity={1}
               mouseInteraction={true}
-              mouseStrength={0.6}
-              mouseRadius={0.8}
+              mouseStrength={0.7}
+              mouseRadius={0.85}
               mouseDampening={0.12}
             />
           </Suspense>
