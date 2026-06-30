@@ -92,10 +92,17 @@
 
   .text-gradient-synapse {
     @apply bg-gradient-to-r from-synapse-300 via-synapse-400 to-recall-400 bg-clip-text text-transparent;
+    /* background-clip:text clips to the glyph box exactly — descenders
+       (g, y, p, q, j) need explicit room below the baseline or they get
+       cut by the clip mask regardless of the parent's line-height. */
+    padding-bottom: 0.12em;
+    display: inline-block;
   }
 
   .text-gradient-decay {
     @apply bg-gradient-to-r from-decay-400 via-decay-500 to-synapse-500 bg-clip-text text-transparent;
+    padding-bottom: 0.12em;
+    display: inline-block;
   }
 
   .shimmer-bg {

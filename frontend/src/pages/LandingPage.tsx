@@ -87,12 +87,23 @@ export default function LandingPage() {
       {/*
        * LIGHTFALL — position:fixed, z-index below everything.
        * Never participates in document scroll. Zero jitter by construction.
-       * Covers only the viewport; everything below the fold is just void-950.
+       *
+       * The darkening overlay below was previously a 3-stop gradient with
+       * "via-transparent" sitting at the 50% midpoint, which meant the fade
+       * to solid void-950 was already well underway by the vertical center
+       * of the viewport — smothering the streak effect across most of the
+       * visible area, not just tapering it at the very bottom as intended.
+       * Fixed by pushing the transparent zone much further down (80%) and
+       * only transitioning to solid black in the final 20% of the screen.
        */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <LightfallBackground className="h-full w-full" />
-        {/* Gradient that fades the effect out at the bottom of the hero */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void-950" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, transparent 0%, transparent 78%, #050309 100%)',
+          }}
+        />
       </div>
 
       {/* ── NAV ──────────────────────────────────────────────────────── */}
@@ -170,7 +181,7 @@ export default function LandingPage() {
             className="font-display font-extrabold leading-[1.15] tracking-tight text-mega pb-2"
           >
             <span className="block text-ghost">Forget the</span>
-            <span className="block text-gradient-synapse italic">forgetting</span>
+            <span className="text-gradient-synapse italic">forgetting</span>
             <span className="block text-ghost">curve.</span>
           </motion.h1>
 

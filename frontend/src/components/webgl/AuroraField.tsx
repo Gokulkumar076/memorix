@@ -75,11 +75,11 @@ export function AuroraField({ className }: { className?: string }) {
         }}
       />
 
-      {/* Vignette — pulls focus to center, masks harsh blob edges at frame */}
+      {/* Vignette — subtle depth cue only, kept light so it doesn't compound with other darkening layers */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, rgba(5,3,9,0.65) 100%)',
+          background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 55%, rgba(5,3,9,0.35) 100%)',
         }}
       />
 
