@@ -231,8 +231,11 @@ const Lightfall = ({
         alpha: true,
         antialias: true,
       })
-    } catch {
-      // WebGL unavailable — component unmounts silently, AuroraField CSS fallback remains visible
+      // eslint-disable-next-line no-console
+      console.log('[Lightfall] Renderer created successfully')
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[Lightfall] Renderer creation FAILED:', err)
       return
     }
 
@@ -290,6 +293,9 @@ const Lightfall = ({
       const rect = container.getBoundingClientRect()
       renderer.setSize(rect.width, rect.height)
       uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1]
+      // eslint-disable-next-line no-console
+      console.log('[Lightfall] resize — container rect:', rect.width, 'x', rect.height,
+        '| drawingBuffer:', gl.drawingBufferWidth, 'x', gl.drawingBufferHeight)
     }
 
     resize()
